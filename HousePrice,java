@@ -1,0 +1,70 @@
+/* 5. Write a Java program that accepts a list of housing prices and returns the number of houses sold within
+specific price ranges (e.g., $100,000-200,000, $200,000-300,000, etc.), and the average square footage for each price range. */
+
+import java.util.*;
+
+class HousingData {
+    private double price;
+    private double squareFootage;
+
+    public HousingData(double price, double squareFootage) {
+        this.price = price;
+        this.squareFootage = squareFootage;
+    }
+    public double getPrice() {
+        return price;
+    }
+    public double getSquareFootage() {
+        return squareFootage;
+    }
+}
+public class HousePrice {
+    public static void main(String[] args) {
+        List<HousingData> housingDataList = new ArrayList<>();
+        housingDataList.add(new HousingData(150000, 1200));
+        housingDataList.add(new HousingData(220000, 1500));
+        housingDataList.add(new HousingData(180000, 1300));
+        housingDataList.add(new HousingData(300000, 1800));
+        housingDataList.add(new HousingData(250000, 1600));
+
+        analyzeHousingData(housingDataList);
+    }
+    public static void analyzeHousingData(List<HousingData> housingDataList) {
+        Map<String, Integer> housesSoldByPriceRange = new HashMap<>();
+        Map<String, Double> totalSquareFootageByPriceRange = new HashMap<>();
+        Map<String, Integer> countByPriceRange = new HashMap<>();
+        double[] priceRanges = {100000, 200000, 300000, 400000, 500000}; // Define your own ranges as needed
+        for (int i = 0; i < priceRanges.length - 1; i++) {
+            String rangeKey = String.format("$%.2f-$%.2f", priceRanges[i], priceRanges[i + 1]);
+            housesSoldByPriceRange.put(rangeKey, 0);
+            totalSquareFootageByPriceRange.put(rangeKey, 0.0);
+            countByPriceRange.put(rangeKey, 0);
+        }
+        for (HousingData data : housingDataList) {
+            double price = data.getPrice();
+            double squareFootage = data.getSquareFootage();
+
+            for (int i = 0; i < priceRanges.length - 1; i++) {
+                if (price >= priceRanges[i] && price < priceRanges[i + 1]) {
+                    String rangeKey = String.format("$%.2f-$%.2f", priceRanges[i], priceRanges[i + 1]);
+                    housesSoldByPriceRange.put(rangeKey, housesSoldByPriceRange.get(rangeKey) + 1);
+                    totalSquareFootageByPriceRange.put(rangeKey, totalSquareFootageByPriceRange.get(rangeKey) + squareFootage);
+                    countByPriceRange.put(rangeKey, countByPriceRange.get(rangeKey) + 1);
+                }
+            }
+        }
+        Map<String, Double> averageSquareFootageByPriceRange = new HashMap<>();
+        for (String rangeKey : housesSoldByPriceRange.keySet()) {
+            int housesSold = housesSoldByPriceRange.get(rangeKey);
+            double totalSquareFootage = totalSquareFootageByPriceRange.get(rangeKey);
+            double averageSquareFootage = totalSquareFootage / countByPriceRange.get(rangeKey);
+            averageSquareFootageByPriceRange.put(rangeKey, averageSquareFootage);
+        }
+        System.out.println("Housing Data Analysis:");
+        for (String range : housesSoldByPriceRange.keySet()) {
+            System.out.println(range + ":");
+            System.out.println("  Houses Sold: " + housesSoldByPriceRange.get(range));
+            System.out.println("  Average Square Footage: " + averageSquareFootageByPriceRange.get(range));
+        }
+    }
+}
