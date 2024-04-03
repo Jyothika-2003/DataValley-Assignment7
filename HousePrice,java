@@ -1,4 +1,4 @@
-/* 5. Write a Java program that accepts a list of housing prices and returns the number of houses sold within
+/* Write a Java program that accepts a list of housing prices and returns the number of houses sold within
 specific price ranges (e.g., $100,000-200,000, $200,000-300,000, etc.), and the average square footage for each price range. */
 
 import java.util.*;
